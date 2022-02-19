@@ -1,3 +1,3 @@
-# u3u_panel
+# u3u_dashboard
 
-u3uPanel
+An UNOFFICIAL(tmporarily) app for [u3u.wsm.ink](https://u3u.wsm.ink) using Flutter
