@@ -4,6 +4,7 @@ import 'package:u3u_panel/api.dart' as api;
 import 'dart:ui';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:u3u_panel/markdown_editor.dart';
 import 'package:u3u_panel/user.dart';
 import 'package:u3u_panel/globals.dart' as globals;
 import 'package:u3u_panel/classes.dart' as classes;
@@ -148,7 +149,7 @@ class AddShortLinkState extends State<AddShortLink>{
   final FocusNode _focusNodePassWord = FocusNode();
   final FocusNode _focusNodeTitle = FocusNode();
   // var contentController = TextEditingController();
-  var contentController = HtmlEditorController();
+  var contentController = TextEditingController();
   var userPwdController = TextEditingController();
   var memoTitleController = TextEditingController();
   bool _submitted = false;
@@ -156,56 +157,56 @@ class AddShortLinkState extends State<AddShortLink>{
   String tempText = "";
   classes.Variables vars = classes.Variables(variables: []);
 
-  _initF() async{
-    contentController.insertHtml(md.markdownToHtml(widget.isEdit==null?"":realContent(widget.content!,noReplaceVars: true)));
-  }
+  // _initF() async{
+  //   contentController.insertHtml(md.markdownToHtml(widget.isEdit==null?"":realContent(widget.content!,noReplaceVars: true)));
+  // }
 
   postData() async{
-    tempText = html2md.convert(await contentController.getText());
-    if(widget.isEdit == null) {
-      api.createLink(_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
-              (value){
-            setState(() {
-              _submitted = false;
-              Fluttertoast.showToast(
-                  msg: value['msg'],
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black45,
-                  textColor: Colors.white
-              );
-              if(value['success'] == true){
-                Navigator.pop(context,{'ok':true});
-                // Navigator.push(context, MaterialPageRoute(builder: (context){
-                //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
-                // }));
-              }
-            });
-          });
-    }
-    else{
-      api.editLink(widget.id!,_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
-              (value){
-            setState(() {
-              _submitted = false;
-              Fluttertoast.showToast(
-                  msg: value['msg'],
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black45,
-                  textColor: Colors.white
-              );
-              if(value['success'] == true){
-                Navigator.pop(context,{'ok':true});
-                // Navigator.push(context, MaterialPageRoute(builder: (context){
-                //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
-                // }));
-              }
-            });
-          });
-    }
+    tempText = html2md.convert(contentController.text);
+    // if(widget.isEdit == null) {
+    //   api.createLink(_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
+    //           (value){
+    //         setState(() {
+    //           _submitted = false;
+    //           Fluttertoast.showToast(
+    //               msg: value['msg'],
+    //               toastLength: Toast.LENGTH_SHORT,
+    //               gravity: ToastGravity.CENTER,
+    //               timeInSecForIosWeb: 1,
+    //               backgroundColor: Colors.black45,
+    //               textColor: Colors.white
+    //           );
+    //           if(value['success'] == true){
+    //             Navigator.pop(context,{'ok':true});
+    //             // Navigator.push(context, MaterialPageRoute(builder: (context){
+    //             //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
+    //             // }));
+    //           }
+    //         });
+    //       });
+    // }
+    // else{
+    //   api.editLink(widget.id!,_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
+    //           (value){
+    //         setState(() {
+    //           _submitted = false;
+    //           Fluttertoast.showToast(
+    //               msg: value['msg'],
+    //               toastLength: Toast.LENGTH_SHORT,
+    //               gravity: ToastGravity.CENTER,
+    //               timeInSecForIosWeb: 1,
+    //               backgroundColor: Colors.black45,
+    //               textColor: Colors.white
+    //           );
+    //           if(value['success'] == true){
+    //             Navigator.pop(context,{'ok':true});
+    //             // Navigator.push(context, MaterialPageRoute(builder: (context){
+    //             //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
+    //             // }));
+    //           }
+    //         });
+    //       });
+    // }
     setState(() {
       _submitted = true;
     });
@@ -267,13 +268,14 @@ class AddShortLinkState extends State<AddShortLink>{
                       //       hintText: _isMemo==true?"支持Markdown":"需要加上 https:// 或 http://"
                       //   ),
                       // ),
-                      HtmlEditor(
-                        controller: contentController,
-                        htmlEditorOptions: HtmlEditorOptions(
-                          hint: _isMemo==true?"支持Markdown":"需要加上 https:// 或 http://",
-                          initialText: md.markdownToHtml(widget.isEdit==null?"":realContent(widget.content!,noReplaceVars: true))
-                        ),
-                      ),
+                      // HtmlEditor(
+                      //   controller: contentController,
+                      //   htmlEditorOptions: HtmlEditorOptions(
+                      //     hint: _isMemo==true?"支持Markdown":"需要加上 https:// 或 http://",
+                      //     initialText: md.markdownToHtml(widget.isEdit==null?"":realContent(widget.content!,noReplaceVars: true))
+                      //   ),
+                      // ),
+                      MarkdownEditor(controller: contentController,enableMarkdown: _isMemo,),
                       Text(tempText),
                       const SizedBox(height:16),
                       Row(
@@ -829,7 +831,7 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
                                                   ),
                                                 ):
                                                 MarkdownBody(
-                                                    data:realContent(link!.content)
+                                                    data:realContent(link!.content),
                                                 ),
                                               ],
                                             ),
