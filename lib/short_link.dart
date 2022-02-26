@@ -14,6 +14,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:url_launcher/url_launcher.dart';
 
 String realContent(classes.Content link,{bool? noReplaceVars}){
   if(link.needPassword == true){
@@ -163,51 +164,51 @@ class AddShortLinkState extends State<AddShortLink>{
   // }
 
   postData() async{
-    tempText = html2md.convert(contentController.text);
-    // if(widget.isEdit == null) {
-    //   api.createLink(_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
-    //           (value){
-    //         setState(() {
-    //           _submitted = false;
-    //           Fluttertoast.showToast(
-    //               msg: value['msg'],
-    //               toastLength: Toast.LENGTH_SHORT,
-    //               gravity: ToastGravity.CENTER,
-    //               timeInSecForIosWeb: 1,
-    //               backgroundColor: Colors.black45,
-    //               textColor: Colors.white
-    //           );
-    //           if(value['success'] == true){
-    //             Navigator.pop(context,{'ok':true});
-    //             // Navigator.push(context, MaterialPageRoute(builder: (context){
-    //             //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
-    //             // }));
-    //           }
-    //         });
-    //       });
-    // }
-    // else{
-    //   api.editLink(widget.id!,_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
-    //           (value){
-    //         setState(() {
-    //           _submitted = false;
-    //           Fluttertoast.showToast(
-    //               msg: value['msg'],
-    //               toastLength: Toast.LENGTH_SHORT,
-    //               gravity: ToastGravity.CENTER,
-    //               timeInSecForIosWeb: 1,
-    //               backgroundColor: Colors.black45,
-    //               textColor: Colors.white
-    //           );
-    //           if(value['success'] == true){
-    //             Navigator.pop(context,{'ok':true});
-    //             // Navigator.push(context, MaterialPageRoute(builder: (context){
-    //             //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
-    //             // }));
-    //           }
-    //         });
-    //       });
-    // }
+    tempText = contentController.text;
+    if(widget.isEdit == null) {
+      api.createLink(_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
+              (value){
+            setState(() {
+              _submitted = false;
+              Fluttertoast.showToast(
+                  msg: value['msg'],
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black45,
+                  textColor: Colors.white
+              );
+              if(value['success'] == true){
+                Navigator.pop(context,{'ok':true});
+                // Navigator.push(context, MaterialPageRoute(builder: (context){
+                //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
+                // }));
+              }
+            });
+          });
+    }
+    else{
+      api.editLink(widget.id!,_isMemo?"memo":"url", tempText, _needPassword, userPwdController.text, memoTitleController.text,vars).then(
+              (value){
+            setState(() {
+              _submitted = false;
+              Fluttertoast.showToast(
+                  msg: value['msg'],
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black45,
+                  textColor: Colors.white
+              );
+              if(value['success'] == true){
+                Navigator.pop(context,{'ok':true});
+                // Navigator.push(context, MaterialPageRoute(builder: (context){
+                //   return ShortLinkDetail(value['data']['prefix']+"x"+value['data']['suffix']);
+                // }));
+              }
+            });
+          });
+    }
     setState(() {
       _submitted = true;
     });
@@ -277,8 +278,9 @@ class AddShortLinkState extends State<AddShortLink>{
                       //   ),
                       // ),
                       FocusWidget(
-                          child: MarkdownEditor(controller: contentController,enableMarkdown: _isMemo,focusNodeContent: _focusNodeContent,),
-                          focusNode: _focusNodeContent
+                        child: MarkdownEditor(controller: contentController,enableMarkdown: _isMemo,focusNodeContent: _focusNodeContent,),
+                        focusNode: _focusNodeContent,
+                        // showFocusArea: true,
                       ),
                       Text(tempText),
                       const SizedBox(height:16),
@@ -723,6 +725,10 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
           }
     });
   }
+  void _launchURL(_url) async {
+    if (!await launch(_url)) throw 'Could not launch $_url';
+  }
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -742,6 +748,9 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
             valueListenable: isOwner,
             builder: editButton
           ),
+          IconButton(onPressed: (){
+            _launchURL(globals.settings['host']+'/'+(link!=null?link!.prefix:"")+"x"+(link!=null?link!.suffix:""));
+          }, icon: const Icon(Icons.open_in_new))
         ],
       ),
       body: SingleChildScrollView(
@@ -835,7 +844,8 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
                                                   ),
                                                 ):
                                                 MarkdownBody(
-                                                    data:realContent(link!.content),
+                                                  data:realContent(link!.content),
+                                                  selectable: true,
                                                 ),
                                               ],
                                             ),

@@ -6,7 +6,7 @@ An UNOFFICIAL(tmporarily) app for [u3u.wsm.ink](https://u3u.wsm.ink) using Flutt
 
 - [ ] Dark Mode
 - [ ] Custom MarkdownEditor
-- [ ] Open short link in browser
+- [x] Open short link in browser
 - [ ] Multi language support
 - [ ] Decrypt short links
 - [ ] Admin Mode
