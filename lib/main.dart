@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:u3u_panel/launch_page.dart';
 import 'package:u3u_panel/settings.dart';
 import 'package:u3u_panel/user.dart';
@@ -12,7 +13,18 @@ import 'package:u3u_panel/globals.dart' as globals;
 String? token;
 
 void main() {
-  runApp(const MaterialApp(home:LaunchPage()));
+  runApp(const MaterialApp(
+      home:LaunchPage(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: [
+        Locale('zh', 'CN'),
+        Locale('en', 'US'),
+      ]
+  ));
 }
 
 String launchText = "";
@@ -35,6 +47,15 @@ class U3UApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'υ3υ 面板',
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('zh','CN'),
+        Locale('en','US')
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

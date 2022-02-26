@@ -1,5 +1,6 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:focus_widget/focus_widget.dart';
 import 'package:u3u_panel/api.dart' as api;
 import 'dart:ui';
 import 'dart:core';
@@ -275,7 +276,10 @@ class AddShortLinkState extends State<AddShortLink>{
                       //     initialText: md.markdownToHtml(widget.isEdit==null?"":realContent(widget.content!,noReplaceVars: true))
                       //   ),
                       // ),
-                      MarkdownEditor(controller: contentController,enableMarkdown: _isMemo,),
+                      FocusWidget(
+                          child: MarkdownEditor(controller: contentController,enableMarkdown: _isMemo,focusNodeContent: _focusNodeContent,),
+                          focusNode: _focusNodeContent
+                      ),
                       Text(tempText),
                       const SizedBox(height:16),
                       Row(

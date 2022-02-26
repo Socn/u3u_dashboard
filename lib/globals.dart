@@ -7,6 +7,8 @@ class MyColors{
   static const Color secondaryText = Colors.black38;
   static const Color accentColor = Colors.blueAccent;
   static const Color blockColor = Color.fromARGB(255, 240, 240, 240);
+  static const Color iconColor = Colors.black;
+  static const Color iconColorDisabled = secondaryText;
 }
 
 Map<String,dynamic> config={
