@@ -278,7 +278,12 @@ class AddShortLinkState extends State<AddShortLink>{
                       //   ),
                       // ),
                       FocusWidget(
-                        child: MarkdownEditor(controller: contentController,enableMarkdown: _isMemo,focusNodeContent: _focusNodeContent,),
+                        child: MarkdownEditor(
+                          controller: contentController,
+                          enableMarkdown: _isMemo,
+                          focusNodeContent: _focusNodeContent,
+                          initText: widget.isEdit==null?"":realContent(widget.content!,noReplaceVars: true),
+                        ),
                         focusNode: _focusNodeContent,
                         // showFocusArea: true,
                       ),
@@ -842,6 +847,9 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
                                   ),
                                   Container(
                                     margin: const EdgeInsets.only(left: 20, right:20, top: 6, bottom: 6),
+                                    constraints: BoxConstraints(
+                                      minWidth: MediaQuery.of(context).size.width
+                                    ),
                                     child:SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       physics: const BouncingScrollPhysics(),
