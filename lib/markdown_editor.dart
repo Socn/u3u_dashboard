@@ -6,12 +6,13 @@ import 'package:u3u_panel/globals.dart' as globals;
 import 'package:focus_widget/focus_widget.dart';
 
 class MarkdownEditor extends StatefulWidget{
-  const MarkdownEditor({Key? key,this.enableMarkdown=true,this.hintText="",required this.controller, required this.focusNodeContent}) : super(key: key);
+  const MarkdownEditor({Key? key,this.enableMarkdown=true,this.hintText="",required this.controller, required this.focusNodeContent, this.initText=""}) : super(key: key);
 
   final bool enableMarkdown;
   final FocusNode focusNodeContent;
   final String hintText;
   final controller;
+  final String initText;
   @override
   State<StatefulWidget> createState() {
     return MarkdownEditorState();
@@ -27,6 +28,8 @@ class MarkdownEditorState extends State<MarkdownEditor>{
   void initState(){
     showPreview = true;
     content = "";
+    widget.controller.text = widget.initText;
+    print(widget.initText);
     super.initState();
   }
 
