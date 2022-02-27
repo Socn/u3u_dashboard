@@ -19,7 +19,7 @@ Map<String,dynamic> config={
 classes.User? userInfo;
 
 Map<String,dynamic> settings={
-  'host': '',
+  'host': 'https://u3u.wsm.ink',
   'initPage': "none"
 };
 
