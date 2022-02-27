@@ -824,36 +824,6 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
                               borderRadius: const BorderRadius.all(Radius.circular(12.0)),
                               child: Stack(
                                 children: [
-                                  Container(
-                                    margin: const EdgeInsets.all(20),
-                                    child:Column(
-                                      children: <Widget>[
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                link!.mode=="url"?
-                                                Text(
-                                                  realContent(link!.content),
-                                                  style: const TextStyle(
-                                                      fontSize: 17
-                                                  ),
-                                                ):
-                                                MarkdownBody(
-                                                  data:realContent(link!.content),
-                                                  selectable: true,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                   Positioned(
                                       bottom: -15,
                                       left: -10,
@@ -869,6 +839,28 @@ class ShortLinkDetailState extends State<ShortLinkDetail>{
                                           ),
                                         ),
                                       )
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 20, right:20, top: 6, bottom: 6),
+                                    child:SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const BouncingScrollPhysics(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 16, bottom: 16),
+                                        child: link!.mode=="url"?
+                                        Text(
+                                          realContent(link!.content),
+                                          style: const TextStyle(
+                                              fontSize: 17
+                                          ),
+                                        ):
+                                        MarkdownBody(
+                                          data:realContent(link!.content),
+                                          selectable: true,
+                                          softLineBreak: true,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
